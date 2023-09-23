@@ -33,16 +33,64 @@
  * Experimentally, 550 and 2350 are pretty close to 0 and 180.
  */
 
-#include <Arduino.h>
-#include <CarServoController.h>
+#include "CarServoController.h"
 
-CarServoController carServoController(13, 5, 23, 1000, 2000, 10);
-
-void setup() {
-  carServoController.setup();
+CarServoController::CarServoController(int servo1Pin, int servo2Pin, int servo3Pin, int minUs, int maxUs, int delayMsec) {
+  this->servo1Pin = servo1Pin;
+  this->servo2Pin = servo2Pin;
+  this->servo3Pin = servo3Pin;
+  this->minUs = minUs;
+  this->maxUs = maxUs;
+  this->delayMsec = delayMsec;
+  this->pos = 0;
 }
 
-void loop() {
-  carServoController.loop();
-  delay(1000);
+void CarServoController::setup() {
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1);
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
+  Serial.begin(115200);
+  servo1.setPeriodHertz(50);
+  servo2.setPeriodHertz(50);
+  servo3.setPeriodHertz(350);
+}
+
+void CarServoController::loop() {
+  servo1.attach(servo1Pin, minUs, maxUs);
+  servo2.attach(servo2Pin, minUs, maxUs);
+  servo3.attach(servo3Pin, minUs, maxUs);
+  pwm.attachPin(27, 10000);
+
+  for (pos = 0; pos <= 180; pos += 1) {
+    servo1.write(pos);
+    delay(delayMsec);
+  }
+  for (pos = 180; pos >= 0; pos -= 1) {
+    servo1.write(pos);
+    delay(delayMsec);
+  }
+
+  for (pos = 0; pos <= 180; pos += 1) {
+    servo2.write(pos);
+    delay(delayMsec);
+  }
+  for (pos = 180; pos >= 0; pos -= 1) {
+    servo2.write(pos);
+    delay(delayMsec);
+  }
+
+  for (pos = 0; pos <= 180; pos += 1) {
+    servo3.write(pos);
+    delay(delayMsec);
+  }
+  for (pos = 180; pos >= 0; pos -= 1) {
+    servo3.write(pos);
+    delay(delayMsec);
+  }
+
+  servo1.detach();
+  servo2.detach();
+  servo3.detach();
+  pwm.detachPin(27);
 }
