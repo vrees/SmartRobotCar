@@ -38,30 +38,35 @@ void loop()
     /* Backward */
     Motor(Backward, 250);
     delay(2000);
+
     /* Turn_Left */
     Motor(Turn_Left, 250);
     delay(2000);
     /* Turn_Right */
     Motor(Turn_Right, 250);
     delay(2000);
+
     /* Top_Left */
     Motor(Top_Left, 250);
     delay(2000);
     /* Bottom_Right */
     Motor(Bottom_Right, 250);
     delay(2000);
+
     /* Bottom_Left */
     Motor(Bottom_Left, 250);
     delay(2000);
     /* Top_Right */
     Motor(Top_Right, 250);
     delay(2000);
+
     /* Clockwise */
     Motor(Clockwise, 250);
     delay(2000);
     /* Contrarotate */
     Motor(Contrarotate, 250);
     delay(2000);
+
     /* Stop */
     Motor(Stop, 250);
     delay(2000);

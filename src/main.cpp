@@ -34,15 +34,55 @@
  */
 
 #include <Arduino.h>
-#include <CarServoController.h>
+#include "CarServoController.h"
+#include "MotorController.h"
+
+// PWM control pin
+const int PWM1_PIN = 16; // 5
+const int PWM2_PIN = 27; // 6
+
+// 74HCT595N Chip pins
+const int SHCP_PIN = 26; // 2
+const int EN_PIN = 14;   // 7
+const int DATA_PIN = 12; // 8
+const int STCP_PIN = 17; // 4
+
+MotorController motorController(PWM1_PIN, PWM2_PIN, SHCP_PIN, EN_PIN, DATA_PIN, STCP_PIN);
 
 CarServoController carServoController(13, 5, 23, 1000, 2000, 10);
 
-void setup() {
-  carServoController.setup();
+void setup()
+{
+  // carServoController.setup();
+  motorController.begin();
 }
 
-void loop() {
-  carServoController.loop();
-  delay(1000);
+void loop()
+{
+  /* Forward */
+  motorController.motor(Forward, 250);
+  delay(2000);
+
+  /* Backward */
+  motorController.motor(Backward, 250);
+  delay(2000);
+
+  /* Turn_Left */
+  motorController.motor(TurnLeft, 250);
+  delay(2000);
+
+  /* Turn_Right */
+  motorController.motor(TurnRight, 250);
+  delay(2000);
+
+  /* Clockwise */
+  motorController.motor(Clockwise, 250);
+  delay(2000);
+  /* Contrarotate */
+  motorController.motor(Contrarotate, 250);
+  delay(2000);
+
+  /* Stop */
+  motorController.stop();
+  delay(2000);
 }
